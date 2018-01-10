@@ -9,13 +9,16 @@ const Playoffpicture = ({ teams, teams2 }) => (
     <div>
         <h1>Playoff Picture</h1>
         <ol className='East'>
+        <div className='EastTeamBox'>
         {teams.map((team,idx)=>(
-            <li>
-            <div className = {idx}>
+          
+            <div className =  {idx}>
             {team[5]}<br/>
+            <span className='EastSeeds'>{idx+ 1}</span>
             </div>
-        </li>
+       
         ))}
+        </div>
         </ol>
         <br/>
         <ol className='West'>
@@ -23,6 +26,7 @@ const Playoffpicture = ({ teams, teams2 }) => (
             <li>
                 <div className={idx}>
             {team[5]}<br/>
+            <span className='WestSeeds'>{idx+ 1}</span>
             </div>
             </li>
         ))}<br/>

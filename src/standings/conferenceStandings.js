@@ -7,29 +7,23 @@ import standingsFunctions from './standingsFunctions.js';
 // a link to each one's individual page.
 const Conferencestandings = ({teams}) => (
  
-  <ul>
-   kokok<br/>
-   {/* {standingsFunctions.returnArrOfTeamInfo(teams[0])}<br/>
-   {standingsFunctions.returnArrOfTeamInfo(teams[1])}<br/> */}
+  <div>
+   <ol>
+   <br/>
    {teams.map(team => (
-     <ul>
        <li>
        {team[5]}<br/>
-       {/* {team[6]} */}
        Wins:{''}{team[7]}<br/>
        Losses:{''}{team[8]}<br/>
-       {/* {team[5]}
-       {team[5]} */}
+       
+       <br/>
+       <br/>
        </li>
-     {/* {team.map(teamInfo => (
-       <div>
-        {teamInfo} */}
-       {/* </div> */}
-     {/* ))} */}
-     </ul>
-   ))}
-   {/* {teams[0]} */}
-  </ul>
+     
+    ))}
+    </ol>
+  </div>
+    
 );
 
 // console.log(teams.split(''))
