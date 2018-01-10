@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 // import logo from './logo.svg';
 import './App.css';
-import { Link, Route, Switch } from "react-router-dom";
+// import { Link, Route, Switch } from "react-router-dom";
 
 const axios = require("axios");
 // const convert = require('xml-js');
@@ -124,7 +124,6 @@ class CurrentPlayoffs extends React.Component {
 
     componentDidMount() {
       this.getTeamRoster();
-      // this.getPlayoffPicture()
       }
   render() {
     const { teamArraySelect, responseStateTeam} = this.state
@@ -144,30 +143,13 @@ class CurrentPlayoffs extends React.Component {
           {" "}
           Go{" "}
         </button>
-        <button onClick={this.getPlayoffPicture}>
-          {" "}
-          Go00{" "}
-        </button>
+       
+       
 
         <br/>
         <br/>
         <br/>
-          <div>
-          {this.state.responseStateTeam.map(player => (
-          <div className = 'playerdiv'>
-            {player[3]}
-            <div className = 'playerinfo'>
-            {player[8]}<br/>
-            {player[6]}<br/>
-            {player[7]}<br/>
-            {player[5]}
-            <br/>
-            <br/>
-            </div>
-          </div>
-          ))}
-          
-          </div>
+        
           <br/>
         <br/>
         </div>

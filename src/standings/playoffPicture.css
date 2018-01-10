@@ -1,0 +1,13 @@
+.West{
+    background-color :rgb(250, 58, 58);
+}
+
+.East{
+    background-color :rgb(52, 52, 231)
+}
+.East [class="1"]{
+background-color: yellow;
+/* padding-top: 4em */
+
+}
+

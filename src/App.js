@@ -1,8 +1,10 @@
 import React from "react";
 import { Link, Switch, Route } from "react-router-dom";
-import standingsRender from "./standings/standingsRender";
+// import standingsRender from "./standings/standingsRender";
 import Home from "./Home";
 import teamPlayersRender from "./teams/teamPlayersRender";
+import standingsRender from "./standings/standingsRender";
+
 
 const App = () => (
   <div>

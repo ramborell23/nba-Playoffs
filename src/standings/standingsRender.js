@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
-import StandingsHome from "./standingsHome";
+import standingsFunctions from './standingsFunctions.js';
+import Conferencestandings from "./conferenceStandings";
+import Playoffpicture from "./playoffPicture";
 import { Link, Route, Switch } from "react-router-dom";
-
-
+import './playoffPicture.css';
 const axios = require("axios");
-// const convert = require('xml-js');
+
+// import westernConference from "./westernConference";
 
 
 const nameJoinForFetch = teamStateName => {
@@ -14,98 +15,59 @@ const nameJoinForFetch = teamStateName => {
   return newName
 };
 
-const teams = {
-  AtlantaHawks: 1610612737,
-  BostonCeltics: 1610612738,
-  BrooklynNets: 1610612751,
-  CharlotteHornets: 1610612766,
-  ChicagoBulls: 1610612741,
-  ClevelandCavelers: 1610612739,
-  DallasMavericks: 1610612742,
-  DenverNuggets: 1610612743,
-  DetroitPistons: 1610612765,
-  GoldenStateWarriors: 1610612744,
-  HoustonRockets: 1610612745,
-  IndianaPacers: 1610612754,
-  LosAngelesClippers: 1610612746,
-  LosAngelesLakers: 1610612746,
-  MemphisGrizzles: 1610612763,
-  MiamiHeat: 1610612748,
-  MilwaukeeBucks: 1610612749,
-  MinniesotaTimberwolves: 1610612750,
-  NewOrleansPelicans: 1610612740,
-  NewYorkKnicks: 1610612752,
-  OklahomaCityThunder: 1610612760,
-  OrlandoMagic: 1610612753,
-  Philedelphia76ers: 1610612755,
-  PhoenixSuns: 1610612756,
-  PortlandTrailBlazers: 1610612757,
-  SacrementoKings: 1610612756,
-  SanAntonioSpurs: 1610612759,
-  TorontoRaptors: 1610612761,
-  UtahJazz: 1610612762,
-  WashingtonWizards: 1610612764,
+const teamsArr = {
+   1610612737: 'Atlanta Hawks',
+   1610612738:'Boston Celtics',
+   1610612751:'Brooklyn Nets',
+   1610612766:'CharlotteHornets',
+   1610612741:'Chicago Bulls',
+   1610612739: 'Cleveland Cavelers',
+   1610612742:'Dallas Mavericks',
+   1610612743:'Denver Nuggets',
+   1610612765:'Detroit Pistons',
+   1610612744:'Golden State Warriors',
+   1610612745:'Houston Rockets',
+   1610612754:'Indiana Pacers',
+   1610612746:'Los Angeles Clippers',
+   1610612746:'Los Angeles Lakers',
+   1610612763:'Memphis Grizzles',
+   1610612748:'Miami Heat',
+   1610612749:'Milwaukee Bucks',
+   1610612750:'MinniesotaTimberwolves',
+   1610612740:'New Orleans Pelicans',
+   1610612752:'New York Knicks',
+   1610612760:'Oklahoma City Thunder',
+   1610612753:'Orlando Magic',
+   1610612755:'Philedelphia 76ers',
+   1610612756:'Phoenix Suns',
+   1610612757:'Portland Trail Blazers',
+   1610612756:'Sacremento Kings',
+   1610612759:'San Antonio Spurs',
+   1610612761:'Toronto Raptors',
+   1610612762:'Utah Jazz',
+   1610612764:'Washington Wizards',
 };
-
-
 
 class CurrentPlayoffs extends React.Component {
   constructor() {
     super()
-    this.teamsArray= ['',
-          'Atlanta Hawks',
-          'Boston Celtics',
-          'Brooklyn Nets',
-          'Charlotte Hornets',
-          'Chicago Bulls',
-          'Cleveland Cavelers',
-          'Dallas Mavericks',
-          'Denver Nuggets',
-          'Detroit Pistons',
-          'Golden State Warriors',
-          'Houston Rockets',
-          'Indiana Pacers',
-          'Los Angeles Clippers',
-          'Los Angeles Lakers',
-          'Memphis Grizzles',
-          'Miami Heat',
-          'Milwaukee Bucks',
-          'Minniesota Timberwolves',
-          'New Orleans Pelicans	',
-          'New York Knicks',
-          'Oklahoma City Thunder',
-          'Orlando Magic',
-          'Philadelphia 76ers',
-          'Phoenix Suns',
-          'Portland Trail Blazers',
-          'Sacramento Kings',
-          'San Antonio Spurs',
-          'Toronto Raptors',
-          'Utah Jazz',
-          'Washington Wizards',
-    ]
-  
     this.state={
       teamArraySelect:'',
       responseStateTeam:[],
-      responseTestTeam:'',
       easternConferenceTeamsState:'',
+      easternConferencePlayoffTeamsState:'',
+      easternConferenceBottomTeamsState:'',
+      easternConferenceContendingTeamsState: '',
       westernConferenceTeamsState:'',
-      testArr:['testing 123'],
+      westernConferencePlayoffTeamsState:'',
+      westernConferenceBottomTeamsState:'',
+      westernConferenceContendingTeamsState:'',
     }
   }
 
-
-    handleBrandSelection = e => {
-      this.setState({
-        teamArraySelect: e.target.value
-      })
-      console.log(this.teamArraySelect)
-    }
-
     getPlayoffPicture = () => {
       const teamName= (nameJoinForFetch(this.state.teamArraySelect))
-    console.log(teams[teamName])
+    // console.log(teams[teamName])
       axios
         .get(`http://stats.nba.com/stats/scoreboard/?GameDate=05/06/2018&LeagueID=00&DayOffset=0`)
         .then(response => {
@@ -113,9 +75,16 @@ class CurrentPlayoffs extends React.Component {
             easternConferenceTeamsState:( response.data.resultSets[4].rowSet  ),
             westernConferenceTeamsState:( response.data.resultSets[5].rowSet ),
           });
-          console.log(this.state.westernConferenceTeamsState)
+          this.setState({
+            easternConferencePlayoffTeamsState: [...standingsFunctions.playoffsTeams(this.state.easternConferenceTeamsState)] ,
+            easternConferenceContendingTeamsState: [...standingsFunctions.contendingTeams(this.state.easternConferenceTeamsState)] ,
+            easternConferenceBottomTeamsState: [...standingsFunctions.bottomTeams(this.state.easternConferenceTeamsState)] ,
+            
+            westernConferencePlayoffTeamsState: [...standingsFunctions.playoffsTeams(this.state.westernConferenceTeamsState)] ,
+            westernConferenceContendingTeamsState: [...standingsFunctions.contendingTeams(this.state.westernConferenceTeamsState)] ,
+            westernConferenceBottomTeamsState: [...standingsFunctions.bottomTeams(this.state.westernConferenceTeamsState)] ,
+          })
           console.log(this.state.easternConferenceTeamsState)
-          // console.log(response.data.resultSets[0].rowSet)
         })
         .catch(err => {
           console.log("error fetching image");
@@ -123,9 +92,22 @@ class CurrentPlayoffs extends React.Component {
         });
     };
 
-    renderPlayoffList = () => {
-        const teamsl = this.state.easternConferenceTeamsState
-        return <playoffList teams={teamsl} />;
+  
+    westernConferenceStandings = () => {
+        const teamsl = standingsFunctions.returnArrOfTeamInfo(this.state.westernConferenceTeamsState)   
+        return <Conferencestandings teams={teamsl} />;
+    };
+
+    easternConferenceStandings = () => {
+        const teamsl = standingsFunctions.returnArrOfTeamInfo(this.state.easternConferenceTeamsState)   
+        return <Conferencestandings teams={teamsl} />;
+    };
+
+    playoffPicture = () => {
+        const east = standingsFunctions.returnArrOfTeamInfo(this.state.easternConferencePlayoffTeamsState)   
+        const west = standingsFunctions.returnArrOfTeamInfo(this.state.westernConferencePlayoffTeamsState)   
+        return <Playoffpicture teams={east} teams2={west} />;
+        // return <Playoffpicture teams={west} />;
     };
 
     componentDidMount() {
@@ -133,66 +115,34 @@ class CurrentPlayoffs extends React.Component {
     }
 
   render() {
-    const { teamArraySelect, responseStateTeam} = this.state
-    const teamName= (nameJoinForFetch(teamArraySelect))
-    console.log(teams[teamName])
+    // const { teamArraySelect, responseStateTeam, easternConferenceTeamsState, easternConferencePlayoffTeamsState} = this.state
+      console.log(this.state.easternConferencePlayoffTeamsState)
+      console.log(this.state.westernConferencePlayoffTeamsState)
+      console.log(this.state.westernConferenceContendingTeamsState)
+      console.log(this.state.westernConferenceBottomTeamsState)
+      console.log( "break")
+    console.log( "break")
     return (
-      <div>
+      <div className='standingsRender'>
+            {" "}
+          <Link to="/standings/easternConference">'East'{'\u2728'}</Link>
+          {"  "}
+          <Link to="/standings/westernConference">'West'{'\u2728'}</Link>
+          {"  "}
+          {"  "}
+          <Link to="/standings/playoffPicture">'Playoff Picture'{'\u2728'}</Link>
+          {"  "}
          <div>
-        <nav>
-
-          {" "}
-          <Link to="/movies/onestar">'East'{'\u2728'}</Link>
-          {"  "}
-          <Link to="/movies/twostar">'West'{'\u2728'}</Link>
-          {"  "}
-          
-        </nav>
+          <h1>Standings Home</h1>
         <Switch>
-          <Route path="/genre" render={this.renderMovieGenreList} />
-          <Route exact path="/movies" render={this.renderMovieList} />
-          <Route path="/movies/onestar" render={this.renderOneStarMovieList} />
-          <Route path="/movies/twostar" render={this.renderTwoStarMovieList} />
-          <Route path="/movies/threestar" render={this.renderThreeStarMovieList} />
-          <Route path="/movies/fourstar" render={this.renderFourStarMovieList} />
-          <Route path="/movies/fivestar" render={this.renderFiveStarMovieList} />
-          <Route path="/movies/:id" render={this.renderSingleMovie} />
+          {/* <Route   path="/" render={standingsHome} />        */}
+          <Route  path="/standings/westernConference" render={this.westernConferenceStandings} />
+          <Route  path="/standings/easternConference" render={this.easternConferenceStandings} />
+          <Route  path="/standings/playoffPicture" render={this.playoffPicture} />
+   
         </Switch>
-      </div>
-        Select a Team {" "}
-        <select value={teamArraySelect}
-          onChange={this.handleBrandSelection}>
-          {this.teamsArray.map(option => (
-            <option value={option}>{option}</option>
-          ))}
-        </select>
-        <button onClick={this.getTeamRoster}>
-          {" "}
-          Go{" "}
-        </button>
-       
-
-        <br/>
-        <br/>
-        <br/>
-          <div>
-          {this.state.responseStateTeam.map(player => (
-          <div className = 'playerdiv'>
-            {player[3]}
-            <div className = 'playerinfo'>
-            {player[8]}<br/>
-            {player[6]}<br/>
-            {player[7]}<br/>
-            {player[5]}
-            <br/>
-            <br/>
-            </div>
-          </div>
-          ))}
-          
-          </div>
-          <br/>
-        <br/>
+     </div>
+     <label>standings footer</label>
         </div>
     )
   }
@@ -202,3 +152,10 @@ class CurrentPlayoffs extends React.Component {
 
 
 export default CurrentPlayoffs;
+
+
+/*Things to do :
+1:Return complete team name 
+2: Render Divs for playoff teams
+3: Render Team into divs 
+*/

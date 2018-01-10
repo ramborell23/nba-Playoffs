@@ -2,7 +2,7 @@ import React from "react";
 
 const Home = () => (
   <div>
-    <h1>My Pets' Website</h1>
+    <h1>NBA Home</h1>
   </div>
 );
 
